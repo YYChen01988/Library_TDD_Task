@@ -5,48 +5,57 @@ import static org.junit.Assert.assertEquals;
 
 public class LibraryTest {
     Library library;
-    Book book;
+    Book book1, book2;
+    Borrower borrower;
     
     @Before
     public void before(){
+        borrower = new Borrower();
+
+        book1 = new Book("Harry Potter", "JK Rowling", "Fiction");
+        book2 = new Book("Prince Fisher", "Andy McLaugin", "Children Book");
         library = new Library(5);
-        book = new Book("Harry Potter", "JK Rowling", "Fiction");
+        library.addBookToCollection(book1);
+        library.addBookToCollection(book2);
     }
     
     @Test
-    public void libraryStartEmpty(){
-        assertEquals(0, library.getNumberOfBook());
+    public void libraryStartBookNumber(){
+        assertEquals(2, library.getNumberOfBook());
     }
 
     @Test
     public void canAddBookToCollection() {
-        library.addBookToCollection(book);
-        assertEquals(1, library.getNumberOfBook());
+        library.addBookToCollection(book1);
+        assertEquals(3, library.getNumberOfBook());
     }
 
     @Test
     public void canCountNumberOfBooks(){
-        library.addBookToCollection(book);
-        library.addBookToCollection(book);
         assertEquals(2, library.getNumberOfBook());
     }
 
     @Test
     public void checkStockIsNotFull() {
-        library.addBookToCollection(book);
-        library.addBookToCollection(book);
         assertEquals(true, library.checkStock());
     }
 
     @Test
     public void checkStockIsFull() {
-        library.addBookToCollection(book);
-        library.addBookToCollection(book);
-        library.addBookToCollection(book);
-        library.addBookToCollection(book);
-        library.addBookToCollection(book);
-        library.addBookToCollection(book);
+        library.addBookToCollection(book1);
+        library.addBookToCollection(book2);
+        library.addBookToCollection(book1);
+        library.addBookToCollection(book2);
         assertEquals(false, library.checkStock());
+
+    }
+
+
+    @Test
+    public void canLendABookToBorrower() {
+        library.lendBookToBorrower(borrower, book1);
+        assertEquals(1,library.getNumberOfBook());
+        assertEquals(1,borrower.numberOfBorrowedBook());
 
     }
 }
